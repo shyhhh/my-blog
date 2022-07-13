@@ -1,0 +1,26 @@
+name: syncToGitee
+'on':
+  push:
+    branches:
+      - gh-pages
+jobs:
+  repo-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mirror the Github organization repos to Gitee.
+        uses: Yikun/hub-mirror-action@master
+        with:
+          src: github/shyhhh
+          dst: gitee/he-honghe
+          dst_key: '${{ secrets.GITEE_PRIVATE_KEY }}'
+          dst_token: '${{ secrets.GITEE_TOKEN }}'
+          static_list: my-blog
+          force_update: true
+          debug: true
+      - name: Build Gitee Pages
+        uses: yanglbme/gitee-pages-action@main
+        with:
+          gitee-username: he-honghe
+          gitee-password: '${{ secrets.GITEE_PASSWORD }}'
+          gitee-repo: he-honghe/my-blog
+          branch: gh-pages
